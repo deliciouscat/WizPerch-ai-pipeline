@@ -1,1 +1,4 @@
 parasel @ git+https://github.com/deliciouscat/parasel.git
+pydantic-ai
+jinja2
+python-dotenv
