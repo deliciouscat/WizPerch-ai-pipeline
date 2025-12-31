@@ -18,13 +18,12 @@ sorting = ModuleAdapter(
     out_name="sorted_results",
     )
 
-queries_by_language = [query_expansion(language) for language in ["en", "ko"]]
-
 web_recommend = Serial([
-    Parallel(queries_by_language),
-    Parallel([
-        duckduckgo_search(query_expansion("en")),
-        duckduckgo_search(query_expansion("ko")),
-    ]),
+    Parallel(
+        ByArgs(query_expansion, args={"language": ["en", "ko"]})
+        ),
+    Parallel(
+        ByKeys(duckduckgo_search, keys=["query_expansion"]),
+        ),
     sorting,
 ])
