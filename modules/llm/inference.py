@@ -1,7 +1,7 @@
 import os
 from pydantic_ai import Agent
+from pydantic_ai.models.openai import OpenAIModel
 from pydantic_ai.providers.openrouter import OpenRouterProvider
-from pydantic_ai.models.openai import OpenAIChatModel
 from pydantic import BaseModel
 from typing import Type, TypeVar, Any, Optional
 
@@ -17,7 +17,7 @@ prompt: str
 '''
 
 async def inference(prompt: str, model_name: str, model_settings: dict, system_prompt: Optional[str] = None):
-    model = OpenAIChatModel(
+    model = OpenAIModel(
         model_name,
         provider=OpenRouterProvider(api_key=os.getenv("OPENROUTER_API_KEY")),
     )
@@ -42,7 +42,7 @@ async def structured_inference(
     output_type: Optional[Type[BaseModel]] = None
 ) -> Any:
     """구조화된 출력을 위한 새로운 inference 함수"""
-    model = OpenAIChatModel(
+    model = OpenAIModel(
         model_name,
         provider=OpenRouterProvider(api_key=os.getenv("OPENROUTER_API_KEY")),
     )

@@ -1,6 +1,6 @@
-from parasel import Serial, Parallel, ModuleAdapter
+from parasel import ModuleAdapter,Serial, Parallel, ByArgs, ByKeys
 from modules.query_expansion import query_expansion_by_language
-from modules.search.duckduckgo import duckduckgo_search
+from modules.duckduckgo_search import duckduckgo_search
 from modules.sort import exponential_weighted_gaussian
 
 query_expansion = ModuleAdapter(
@@ -19,11 +19,11 @@ sorting = ModuleAdapter(
     )
 
 web_recommend = Serial([
-    Parallel(
+    Parallel([
         ByArgs(query_expansion, args={"language": ["en", "ko"]})
-        ),
-    Parallel(
+    ]),
+    Parallel([
         ByKeys(duckduckgo_search, keys=["query_expansion"]),
-        ),
+    ]),
     sorting,
 ])
