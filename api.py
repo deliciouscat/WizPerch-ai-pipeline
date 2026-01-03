@@ -1,7 +1,19 @@
 """FastAPI 서버: 웹 추천 파이프라인 API"""
 
 import sys
+import logging
 from pathlib import Path
+from dotenv import load_dotenv
+
+# 환경 변수 로드 (.env 파일에서)
+load_dotenv()
+
+# 로깅 설정
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+    datefmt='%Y-%m-%d %H:%M:%S'
+)
 
 # 프로젝트 루트를 sys.path에 추가
 project_root = Path(__file__).parent
@@ -12,9 +24,12 @@ from parasel.api.fastapi_app import create_app
 from parasel.registry import TaskRegistry
 from tasks.web_recommend import web_recommend
 
+logger = logging.getLogger(__name__)
+
 
 def create_api_app():
     """FastAPI 앱 생성"""
+    logger.info("FastAPI 앱 생성 시작")
     
     # 레지스트리에 태스크 등록
     registry = TaskRegistry()
@@ -28,6 +43,7 @@ def create_api_app():
         tags=["web", "recommendation", "search"],
         mark_stable=True,
     )
+    logger.info("태스크 등록 완료: web_recommend")
     
     # FastAPI 앱 생성
     app = create_app(
@@ -37,6 +53,7 @@ def create_api_app():
         version="0.1.0",
     )
     
+    logger.info("FastAPI 앱 생성 완료")
     return app
 
 

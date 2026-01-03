@@ -6,6 +6,10 @@ import argparse
 import logging
 from pathlib import Path
 from typing import Dict, Any, Optional
+from dotenv import load_dotenv
+
+# 환경 변수 로드 (.env 파일에서)
+load_dotenv()
 
 # 프로젝트 루트를 sys.path에 추가
 project_root = Path(__file__).parent

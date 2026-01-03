@@ -1,5 +1,5 @@
 parasel @ git+https://github.com/deliciouscat/parasel.git
 pydantic-ai
-pydantic-ai-slim[openrouter]
+duckduckgo-search
 jinja2
 python-dotenv

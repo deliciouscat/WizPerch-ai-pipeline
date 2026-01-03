@@ -1,0 +1,16 @@
+Write search queries for the given query, for search engines like Google, DuckDuckGo, Bing, etc.
+- Number of expanded queries: {{ num_queries }}
+- Language of expanded queries: English
+- First think about the direction that can answer the question, and then write a query that can support the reasoning.
+
+The result of the expanded queries should be returned in the following JSON format.
+{
+    "queries": [
+        "expanded query 1",
+        "expanded query 2",
+        ...
+    ]
+}
+
+# User input query
+{{ query }}

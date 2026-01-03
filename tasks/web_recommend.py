@@ -1,6 +1,6 @@
 from parasel import ModuleAdapter,Serial, Parallel, ByArgs, ByKeys
 from modules.query_expansion import query_expansion_by_language
-from modules.duckduckgo_search import duckduckgo_search
+from modules.ddg_search import duckduckgo_search
 from modules.sort import exponential_weighted_gaussian
 
 query_expansion = ModuleAdapter(
