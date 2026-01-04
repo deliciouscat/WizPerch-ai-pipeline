@@ -1,5 +1,5 @@
 parasel @ git+https://github.com/deliciouscat/parasel.git
 pydantic-ai
-duckduckgo-search
+ddgs
 jinja2
 python-dotenv
