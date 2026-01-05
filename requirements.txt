@@ -1,5 +1,7 @@
 parasel @ git+https://github.com/deliciouscat/parasel.git
 pydantic-ai
 ddgs
+playwright
 jinja2
 python-dotenv
+langdetect

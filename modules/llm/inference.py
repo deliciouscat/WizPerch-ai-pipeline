@@ -1,5 +1,7 @@
 import os
 import logging
+import asyncio
+from tenacity import retry, stop_after_attempt, wait_exponential
 from pydantic_ai import Agent
 from pydantic_ai.models.openai import OpenAIModel
 from pydantic_ai.providers.openrouter import OpenRouterProvider
@@ -19,6 +21,7 @@ prompt: str
 
 '''
 
+@retry(stop=stop_after_attempt(3), wait=wait_exponential(multiplier=1, min=4, max=15))
 async def inference(prompt: str, model_name: str, model_settings: dict, system_prompt: Optional[str] = None):
     model = OpenAIModel(
         model_name,

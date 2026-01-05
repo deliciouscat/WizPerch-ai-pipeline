@@ -1,4 +1,5 @@
 import logging
+import langdetect
 from parasel.core.context import Context
 from ddgs import DDGS
 from pydantic import BaseModel
@@ -14,6 +15,7 @@ class DuckDuckGoSearchOutput(BaseModel):
 """
 
 async def duckduckgo_search(context: Context, out_name: str, by_keys_input = None, **kwargs):
+#def duckduckgo_search(context: Context, out_name: str, by_keys_input = None, **kwargs):
     """
     DuckDuckGo 검색 실행
     
@@ -45,12 +47,22 @@ async def duckduckgo_search(context: Context, out_name: str, by_keys_input = Non
     logger.info(f"[duckduckgo_search] 검색 쿼리: '{query}'")
     
     # DDGS는 동기 함수이지만, async 함수 내에서 호출 가능
+    language_to_ddgs_region = {
+        "en": "us-en",
+        "ko": "kr-ko",
+        "ja": "jp-ja",
+        "zh": "cn-zh",
+        "es": "es-es",
+        "id": "id-id",
+        "vn": "vn-vn",
+    }
+
+    detected_language = langdetect.detect(query)
+    region = language_to_ddgs_region.get(detected_language, "us-en")
     with DDGS() as ddgs:
-        results = list(ddgs.text(query, max_results=10))
+        results = list(ddgs.text(query, max_results=3, region=region))
     
     logger.info(f"[duckduckgo_search] 검색 완료: {len(results)}개 결과")
-    
-    # Context에 저장 (ByKeys가 자동으로 리스트에 누적)
     context[out_name] = results
     logger.info(f"[duckduckgo_search] 완료")
 
