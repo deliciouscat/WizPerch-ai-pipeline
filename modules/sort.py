@@ -1,14 +1,17 @@
 from parasel.core.context import Context
+import numpy as np
+import faiss
 
-def exponential_weighted_gaussian(context: Context, out_name: str, **kwargs):
+def normalize_and_sort(context: Context, out_name: str, **kwargs):
     """
     Exponential Weighted Gaussian Sorting
     """
     results = context.get("duckduckgo_search")
-    # 맨 뒤의 것을 앞으로 옮기는 placeholder output
-    if isinstance(results, list) and len(results) > 0:
-        context[out_name] = results[-1:] + results[:-1]
-    else:
-        # results가 딕셔너리이거나 다른 형태인 경우 그대로 반환
-        context[out_name] = results
+    
+    vectors = np.array([v.embedding for v in embedding.data]).astype('float32')
+    index = faiss.IndexFlatIP(vectors.shape[1])     # inner product
+    faiss.normalize_L2(vectors)     # 벡터 정규화 (코사인 유사도 = 정규화된 벡터의 내적)
+    index.add(vectors)              # 인덱스에 벡터 추가
+    
+    context[out_name] = results
     print("log: exponential weighted gaussian sorting")
