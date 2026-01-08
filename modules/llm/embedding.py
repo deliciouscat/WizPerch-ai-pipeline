@@ -3,6 +3,7 @@ import time
 import numpy as np
 import faiss
 from openai import OpenAI
+from tenacity import retry, stop_after_attempt, wait_exponential
 
 or_key = os.environ.get("OPENROUTER_API_KEY")
 
@@ -11,7 +12,7 @@ client = OpenAI(
     api_key=or_key,
 )
 
-@retry(stop=stop_after_attempt(3), wait=wait_exponential(multiplier=1, min=4, max=15))
+@retry(stop=stop_after_attempt(3), wait=wait_exponential(multiplier=1, min=4, max=8))
 def get_embedding(texts: list[str], model_name: str = "qwen/qwen3-embedding-8b"):
     embedding = client.embeddings.create(
     #extra_headers={
@@ -21,13 +22,15 @@ def get_embedding(texts: list[str], model_name: str = "qwen/qwen3-embedding-8b")
     model=model_name,
     input=texts,
     encoding_format="float"
-)
-return embedding.data
+    )
+    return embedding.data
 
-def get_cosine_similarity_index(texts: list[str], model_name: str = "qwen/qwen3-embedding-8b"):
-    embeddings = get_embedding(texts, model_name)
+@retry(stop=stop_after_attempt(3), wait=wait_exponential(multiplier=1, min=4, max=12))
+def get_cosine_similarity_scores(query: str, texts: list[str], model_name: str = "qwen/qwen3-embedding-8b"):
+    embeddings = get_embedding([query, *texts], model_name)
     vectors = np.array([v.embedding for v in embeddings]).astype('float32')
-    index = faiss.IndexFlatIP(vectors.shape[1])
     faiss.normalize_L2(vectors)
-    index.add(vectors)
-    return index
+    index = faiss.IndexFlatIP(vectors.shape[1])
+    index.add(vectors[1:])  # query를 제외하고 texts만 인덱스에 추가
+    distances, indices = index.search(vectors[0:1], k=len(texts))
+    return distances, indices

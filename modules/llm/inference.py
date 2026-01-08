@@ -21,7 +21,7 @@ prompt: str
 
 '''
 
-@retry(stop=stop_after_attempt(3), wait=wait_exponential(multiplier=1, min=4, max=15))
+@retry(stop=stop_after_attempt(3), wait=wait_exponential(multiplier=1, min=4, max=12))
 async def inference(prompt: str, model_name: str, model_settings: dict, system_prompt: Optional[str] = None):
     model = OpenAIModel(
         model_name,
@@ -39,7 +39,7 @@ async def inference(prompt: str, model_name: str, model_settings: dict, system_p
     result = await agent.run(prompt)
     return result
 
-
+@retry(stop=stop_after_attempt(3), wait=wait_exponential(multiplier=1, min=4, max=12))
 async def structured_inference(
     prompt: str, 
     model_name: str, 

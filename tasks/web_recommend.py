@@ -1,7 +1,7 @@
 from parasel import ModuleAdapter,Serial, Parallel, ByArgs, ByKeys
 from modules.query_expansion import query_expansion_by_language
 from modules.ddg_search import duckduckgo_search
-from modules.sort import exponential_weighted_gaussian
+from modules.scoring import normalized_scoring
 from parasel.core.context import Context
 
 query_expansion = ModuleAdapter(
@@ -14,9 +14,9 @@ duckduckgo_search = ModuleAdapter(
     out_name="duckduckgo_search",
     )
 
-sorting = ModuleAdapter(
-    exponential_weighted_gaussian,
-    out_name="sorted_results",
+scoring = ModuleAdapter(
+    normalized_scoring,
+    out_name="scored_results",
     )
 
 def _list_flatten(context: Context, out_name: str, in_name: str = None, **kwargs):
@@ -58,5 +58,5 @@ web_recommend = Serial([
         ByKeys(duckduckgo_search, keys=["query_expansion"]),
     ]),
     list_flatten_duckduckgo_search,
-    sorting,
+    scoring,
 ])
