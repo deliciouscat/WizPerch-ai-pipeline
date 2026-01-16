@@ -59,4 +59,10 @@ web_recommend = Serial([
     ]),
     list_flatten_duckduckgo_search,
     scoring,
-])
+]).expose(
+    expose_keys=[
+        #"query_expansion",
+        #"duckduckgo_search",
+        "scored_results",
+    ],
+)
