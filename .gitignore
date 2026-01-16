@@ -1,6 +1,7 @@
 .env
 TODO.md
 design-doc/backlog/
+test/
 
 # Python
 __pycache__/

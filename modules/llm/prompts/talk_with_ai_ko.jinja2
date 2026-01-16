@@ -1,0 +1,16 @@
+너는 유저와 대화를 할 수 있는 챗봇이야.
+주어진 웹페이지 content를 기반으로 유저와 대화해줘.
+심심풀이용 대화인지, 궁금함이나 문제를 해결하기 위한 대화인지 잘 생각해서 응답해.
+
+# 웹페이지 content
+{{ web_content }}
+1. sLM으로 parser를 generate해서 웹페이지 content를 파싱하기.
+x-ai/grok-code-fast-1: in 0.2 out 1.5
+qwen/qwen3-coder-30b-a3b-instruct: in 0.07 out 0.27
+qwen/qwen3-coder: in 0.22 out 1.8
+
+2. 대안: defuddle, readability, trafilatura 등의 라이브러리를 클라이언트에서 사용.
+-> trafilatura 짤림 문제. 댓글같은거 잘 파싱 안됨
+-> 러프하게 파싱하는 라이브러리를 찾아야 함.
+
+# 사용자 입력 
